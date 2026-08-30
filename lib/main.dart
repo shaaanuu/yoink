@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Color(0xFF3171C6)),
         scaffoldBackgroundColor: Color(0xFFF4F3F1),
+        fontFamily: 'NanumPenScript',
         textTheme: const TextTheme(
           displayLarge: TextStyle(color: Color(0xFF2D2D2D)),
           displayMedium: TextStyle(color: Color(0xFF2D2D2D)),
