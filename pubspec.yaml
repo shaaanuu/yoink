@@ -28,6 +28,9 @@ flutter:
     - family: NanumPenScript
       fonts:
         - asset: assets/fonts/NanumPenScript.ttf
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono.ttf
 
   assets:
     - assets/icons/

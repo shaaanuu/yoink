@@ -35,6 +35,12 @@ class MyApp extends StatelessWidget {
           labelMedium: TextStyle(color: Color(0xFF2D2D2D)),
           labelSmall: TextStyle(color: Color(0xFF2D2D2D)),
         ),
+        inputDecorationTheme: InputDecorationThemeData(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide.none,
+          ),
+        ),
       ),
       home: ScreenHome(),
     );

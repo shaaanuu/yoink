@@ -6,6 +6,8 @@ class ScreenHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ValueNotifier valueNotifier = ValueNotifier(true);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -21,21 +23,71 @@ class ScreenHome extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              InkWell(
-                onTap: () {},
-                mouseCursor: SystemMouseCursors.click,
-                borderRadius: BorderRadius.circular(12),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SvgPicture.asset(
-                    "assets/icons/arrow_square_right.svg",
-                    width: 42,
-                    colorFilter: const ColorFilter.mode(
-                      Color(0xFF2D2D2D),
-                      BlendMode.dstIn,
-                    ),
-                  ),
-                ),
+              ValueListenableBuilder(
+                valueListenable: valueNotifier,
+                builder: (context, value, _) {
+                  return value
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 25,
+                            vertical: 15,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color(0x262D2D2D),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    style: TextStyle(
+                                      fontFamily: "JetBrainsMono",
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {},
+                                  mouseCursor: SystemMouseCursors.click,
+                                  borderRadius: BorderRadius.horizontal(
+                                    right: Radius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(13),
+                                    child: SvgPicture.asset(
+                                      "assets/icons/arrow_single_right.svg",
+                                      width: 15,
+                                      colorFilter: const ColorFilter.mode(
+                                        Color(0xFF2D2D2D),
+                                        BlendMode.dstIn,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            valueNotifier.value = !value;
+                          },
+                          mouseCursor: SystemMouseCursors.click,
+                          borderRadius: BorderRadius.circular(12),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SvgPicture.asset(
+                              "assets/icons/arrow_square_right.svg",
+                              width: 42,
+                              colorFilter: const ColorFilter.mode(
+                                Color(0xFF2D2D2D),
+                                BlendMode.dstIn,
+                              ),
+                            ),
+                          ),
+                        );
+                },
               ),
             ],
           ),
