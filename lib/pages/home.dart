@@ -6,7 +6,7 @@ class ScreenHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ValueNotifier valueNotifier = ValueNotifier(true);
+    ValueNotifier valueNotifier = ValueNotifier(false);
 
     return Scaffold(
       body: Stack(
