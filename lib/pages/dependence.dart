@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'home.dart';
+
 class ScreenDependence extends StatelessWidget {
   const ScreenDependence({super.key});
 
@@ -25,7 +27,10 @@ class ScreenDependence extends StatelessWidget {
               ),
             ),
             InkWell(
-              onTap: () {},
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ScreenHome()),
+              ),
               mouseCursor: SystemMouseCursors.click,
               borderRadius: BorderRadius.circular(12),
               child: Padding(
