@@ -16,10 +16,13 @@ class ScreenDependence extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 45, color: Color(0xFF3171C6)),
             ),
-            Text(
-              "it's a one-time process\n(hopefully...)",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 22, 0, 42),
+              child: Text(
+                "it's a one-time process\n(hopefully...)",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 24),
+              ),
             ),
             InkWell(
               onTap: () {},
