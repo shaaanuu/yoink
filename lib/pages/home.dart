@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../components/sheet.dart';
+
 class ScreenHome extends StatelessWidget {
   const ScreenHome({super.key});
 
@@ -48,7 +50,10 @@ class ScreenHome extends StatelessWidget {
                                   ),
                                 ),
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () => showModalBottomSheet(
+                                    context: context,
+                                    builder: (ctx) => Sheet(),
+                                  ),
                                   mouseCursor: SystemMouseCursors.click,
                                   borderRadius: BorderRadius.horizontal(
                                     right: Radius.circular(10),

@@ -41,6 +41,10 @@ class MyApp extends StatelessWidget {
             borderSide: BorderSide.none,
           ),
         ),
+        bottomSheetTheme: BottomSheetThemeData(
+          showDragHandle: true,
+          dragHandleColor: Color(0x282D2D2D),
+        ),
       ),
       home: ScreenHome(),
     );
