@@ -9,6 +9,7 @@ class ScreenHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ValueNotifier valueNotifier = ValueNotifier(false);
+    TextEditingController urlController = TextEditingController();
 
     return Scaffold(
       body: Stack(
@@ -43,6 +44,7 @@ class ScreenHome extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: TextField(
+                                    controller: urlController,
                                     style: TextStyle(
                                       fontFamily: "JetBrainsMono",
                                       fontSize: 12,
@@ -50,10 +52,17 @@ class ScreenHome extends StatelessWidget {
                                   ),
                                 ),
                                 InkWell(
-                                  onTap: () => showModalBottomSheet(
-                                    context: context,
-                                    builder: (ctx) => Sheet(),
-                                  ),
+                                  onTap: () =>
+                                      urlController.text.isNotEmpty &&
+                                          Uri.parse(
+                                            urlController.text,
+                                          ).isAbsolute
+                                      ? showModalBottomSheet(
+                                          context: context,
+                                          builder: (ctx) =>
+                                              Sheet(url: urlController.text),
+                                        )
+                                      : null,
                                   mouseCursor: SystemMouseCursors.click,
                                   borderRadius: BorderRadius.horizontal(
                                     right: Radius.circular(10),

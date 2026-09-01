@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Sheet extends StatelessWidget {
-  const Sheet({super.key});
+  const Sheet({super.key, required this.url});
+
+  final String url;
 
   @override
   Widget build(BuildContext context) {
