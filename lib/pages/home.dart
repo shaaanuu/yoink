@@ -60,7 +60,7 @@ class ScreenHome extends StatelessWidget {
                                       width: 15,
                                       colorFilter: const ColorFilter.mode(
                                         Color(0xFF2D2D2D),
-                                        BlendMode.dstIn,
+                                        BlendMode.srcIn,
                                       ),
                                     ),
                                   ),
@@ -82,7 +82,7 @@ class ScreenHome extends StatelessWidget {
                               width: 42,
                               colorFilter: const ColorFilter.mode(
                                 Color(0xFF2D2D2D),
-                                BlendMode.dstIn,
+                                BlendMode.srcIn,
                               ),
                             ),
                           ),
@@ -106,7 +106,7 @@ class ScreenHome extends StatelessWidget {
                   width: 34,
                   colorFilter: const ColorFilter.mode(
                     Color(0x402D2D2D),
-                    BlendMode.dstIn,
+                    BlendMode.srcIn,
                   ),
                 ),
               ),
