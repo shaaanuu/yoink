@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'pages/home.dart';
+import 'pages/dependence.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
           dragHandleColor: Color(0x282D2D2D),
         ),
       ),
-      home: ScreenHome(),
+      home: ScreenDependence(),
     );
   }
 }
