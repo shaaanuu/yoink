@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../services/ytdlp_service.dart';
 import 'home.dart';
 
 class ScreenDependence extends StatelessWidget {
@@ -27,10 +28,14 @@ class ScreenDependence extends StatelessWidget {
               ),
             ),
             InkWell(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ScreenHome()),
-              ),
+              // onTap: () => Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => ScreenHome()),
+              // ),
+              onTap: () async{
+                YtdlpService yt = YtdlpService();
+                print(await yt.fetchVideo("https://www.youtube.com/watch?v=dQw4w9WgXcQ"));
+              },
               mouseCursor: SystemMouseCursors.click,
               borderRadius: BorderRadius.circular(12),
               child: Padding(
