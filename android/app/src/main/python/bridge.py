@@ -48,3 +48,18 @@ def get_info(url):
             })
     except Exception as e:
         return json.dumps({"ok": False, "error": str(e)})
+
+def download(url, format_id, output_dir):
+    try:
+        import yt_dlp
+        opts = {
+            'format': format_id,
+            'outtmpl': f'{output_dir}/%(title)s.%(ext)s',
+            'quiet': True,
+            'no_warnings': True,
+        }
+        with yt_dlp.YoutubeDL(opts) as ydl:
+            ydl.download([url])
+        return json.dumps({"ok": True})
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})

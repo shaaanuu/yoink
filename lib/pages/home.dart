@@ -11,6 +11,7 @@ class ScreenHome extends StatelessWidget {
   Widget build(BuildContext context) {
     final inputExpanded = ValueNotifier<bool>(false);
     final isLoading = ValueNotifier<bool>(false);
+    final isDownloading = ValueNotifier<bool>(false);
     final urlController = TextEditingController();
 
     Future<void> extract() async {
@@ -27,7 +28,7 @@ class ScreenHome extends StatelessWidget {
 
         if (result['ok'] == true) {
           final formats = result['data']['formats'] as List<dynamic>;
-          showModalBottomSheet(
+          final formatId = await showModalBottomSheet<String>(
             context: context,
             isScrollControlled: true,
             builder: (ctx) => DraggableScrollableSheet(
@@ -39,6 +40,27 @@ class ScreenHome extends StatelessWidget {
                   Sheet(formats: formats, scrollController: scrollController),
             ),
           );
+
+          if (formatId != null && context.mounted) {
+            isDownloading.value = true;
+            final dlResult = await yt.downloadVideo(
+              urlController.text,
+              formatId,
+            );
+            isDownloading.value = false;
+
+            if (!context.mounted) return;
+
+            if (dlResult['ok'] == true) {
+              messenger.showSnackBar(
+                const SnackBar(content: Text('Download complete')),
+              );
+            } else {
+              messenger.showSnackBar(
+                SnackBar(content: Text(dlResult['error'] ?? 'Download failed')),
+              );
+            }
+          }
         } else {
           messenger.showSnackBar(
             SnackBar(content: Text(result['error'] ?? 'Extraction failed')),
@@ -73,68 +95,88 @@ class ScreenHome extends StatelessWidget {
                 );
               }
               return ValueListenableBuilder<bool>(
-                valueListenable: inputExpanded,
-                builder: (context, expanded, _) {
-                  if (expanded) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
+                valueListenable: isDownloading,
+                builder: (context, downloading, _) {
+                  if (downloading) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(
                         horizontal: 25,
                         vertical: 15,
                       ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0x262D2D2D),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: urlController,
-                                style: TextStyle(
-                                  fontFamily: "JetBrainsMono",
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: extract,
-                              mouseCursor: SystemMouseCursors.click,
-                              borderRadius: BorderRadius.horizontal(
-                                right: Radius.circular(10),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(13),
-                                child: SvgPicture.asset(
-                                  "assets/icons/arrow_single_right.svg",
-                                  width: 15,
-                                  colorFilter: const ColorFilter.mode(
-                                    Color(0xFF2D2D2D),
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      child: Column(
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 8),
+                          Text("Downloading..."),
+                        ],
                       ),
                     );
                   }
-                  return InkWell(
-                    onTap: () => inputExpanded.value = true,
-                    mouseCursor: SystemMouseCursors.click,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        "assets/icons/arrow_square_right.svg",
-                        width: 42,
-                        colorFilter: const ColorFilter.mode(
-                          Color(0xFF2D2D2D),
-                          BlendMode.srcIn,
+                  return ValueListenableBuilder<bool>(
+                    valueListenable: inputExpanded,
+                    builder: (context, expanded, _) {
+                      if (expanded) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 25,
+                            vertical: 15,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Color(0x262D2D2D),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: urlController,
+                                    style: TextStyle(
+                                      fontFamily: "JetBrainsMono",
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: extract,
+                                  mouseCursor: SystemMouseCursors.click,
+                                  borderRadius: BorderRadius.horizontal(
+                                    right: Radius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(13),
+                                    child: SvgPicture.asset(
+                                      "assets/icons/arrow_single_right.svg",
+                                      width: 15,
+                                      colorFilter: const ColorFilter.mode(
+                                        Color(0xFF2D2D2D),
+                                        BlendMode.srcIn,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                      return InkWell(
+                        onTap: () => inputExpanded.value = true,
+                        mouseCursor: SystemMouseCursors.click,
+                        borderRadius: BorderRadius.circular(12),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SvgPicture.asset(
+                            "assets/icons/arrow_square_right.svg",
+                            width: 42,
+                            colorFilter: const ColorFilter.mode(
+                              Color(0xFF2D2D2D),
+                              BlendMode.srcIn,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   );
                 },
               );
