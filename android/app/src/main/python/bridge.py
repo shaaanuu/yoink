@@ -16,7 +16,6 @@ def get_info(url):
             'quiet': True,
             'no_warnings': True,
             'skip_download': True,
-            'listformats': True,
         }
         with yt_dlp.YoutubeDL(opts) as ydl:
             info = ydl.extract_info(url, download=False)

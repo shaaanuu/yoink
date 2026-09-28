@@ -21,7 +21,10 @@ class Sheet extends StatelessWidget {
 
     final videoFormats = formats.where((f) {
       final vcodec = (f['vcodec'] as String?) ?? '';
-      return vcodec != 'none' && vcodec.isNotEmpty;
+      final formatNote = (f['format_note'] as String?) ?? '';
+      return vcodec != 'none' &&
+          vcodec.isNotEmpty &&
+          formatNote != 'storyboard';
     }).toList();
 
     final audioFormats = formats.where((f) {
