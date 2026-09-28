@@ -31,6 +31,15 @@ class MainActivity : FlutterActivity() {
                 } catch (e: Exception) {
                     result.error("PYTHON_CRASH", e.message, null)
                 }
+            } else if (call.method == "check_deps") {
+                try {
+                    val py = Python.getInstance()
+                    val module = py.getModule("bridge")
+                    val jsonStr = module.callAttr("check_deps").toString()
+                    result.success(jsonStr)
+                } catch (e: Exception) {
+                    result.error("PYTHON_CRASH", e.message, null)
+                }
             } else {
                 result.notImplemented()
             }

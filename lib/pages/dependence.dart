@@ -19,9 +19,7 @@ class ScreenDependence extends StatelessWidget {
 
       try {
         final yt = YtdlpService();
-        final result = await yt.fetchVideo(
-          "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        );
+        final result = await yt.checkDeps();
 
         if (result['ok'] == true) {
           final prefs = await SharedPreferences.getInstance();

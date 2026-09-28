@@ -1,6 +1,13 @@
 import sys
 import json
 
+def check_deps():
+    try:
+        import yt_dlp
+        return json.dumps({"ok": True})
+    except Exception as e:
+        return json.dumps({"ok": False, "error": str(e)})
+
 def get_info(url):
     try:
         import yt_dlp
