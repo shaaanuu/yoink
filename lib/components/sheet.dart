@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Sheet extends StatelessWidget {
-  const Sheet({super.key, required this.formats});
+  const Sheet({
+    super.key,
+    required this.formats,
+    required this.scrollController,
+  });
 
   final List<dynamic> formats;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -35,101 +40,109 @@ class Sheet extends StatelessWidget {
         return ValueListenableBuilder<String?>(
           valueListenable: selectedFormat,
           builder: (context, selected, _) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("What format to yoink?", style: TextStyle(fontSize: 28)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+            return CustomScrollView(
+              controller: scrollController,
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Column(
                     children: [
-                      GestureDetector(
-                        onTap: () => isVideoSelected.value = true,
-                        child: SvgPicture.asset(
-                          "assets/icons/video_camera.svg",
-                          height: 35,
-                          colorFilter: ColorFilter.mode(
-                            isVideo ? selectedClr : defClr,
-                            BlendMode.srcIn,
-                          ),
-                        ),
+                      Text(
+                        "What format to yoink?",
+                        style: TextStyle(fontSize: 28),
                       ),
-                      GestureDetector(
-                        onTap: () => isVideoSelected.value = false,
-                        child: SvgPicture.asset(
-                          "assets/icons/music.svg",
-                          height: 44,
-                          colorFilter: ColorFilter.mode(
-                            !isVideo ? selectedClr : defClr,
-                            BlendMode.srcIn,
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            GestureDetector(
+                              onTap: () => isVideoSelected.value = true,
+                              child: SvgPicture.asset(
+                                "assets/icons/video_camera.svg",
+                                height: 35,
+                                colorFilter: ColorFilter.mode(
+                                  isVideo ? selectedClr : defClr,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => isVideoSelected.value = false,
+                              child: SvgPicture.asset(
+                                "assets/icons/music.svg",
+                                height: 44,
+                                colorFilter: ColorFilter.mode(
+                                  !isVideo ? selectedClr : defClr,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-                Flexible(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: filtered.length,
-                    itemBuilder: (context, i) {
-                      final f = filtered[i] as Map<String, dynamic>;
-                      final formatId = f['format_id'] as String;
-                      final isSelected = selected == formatId;
+                SliverList.builder(
+                  itemCount: filtered.length,
+                  itemBuilder: (context, i) {
+                    final f = filtered[i] as Map<String, dynamic>;
+                    final formatId = f['format_id'] as String;
+                    final isSelected = selected == formatId;
 
-                      return ListTile(
-                        title: Text(
-                          f['resolution'] ?? f['format_note'] ?? f['format_id'],
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: isSelected ? selectedClr : defClr,
-                          ),
+                    return ListTile(
+                      title: Text(
+                        f['resolution'] ?? f['format_note'] ?? f['format_id'],
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: isSelected ? selectedClr : defClr,
                         ),
-                        subtitle: Text(
-                          '${f['ext']} • ${f['vcodec'] ?? ''} ${f['acodec'] ?? ''}'
-                              .trim(),
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: isSelected ? selectedClr : defClr,
-                          ),
-                        ),
-                        trailing: Text(
-                          _formatFileSize(f['filesize']),
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: isSelected ? selectedClr : defClr,
-                          ),
-                        ),
-                        onTap: () {
-                          selectedFormat.value = isSelected ? null : formatId;
-                        },
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: InkWell(
-                    onTap: selected != null
-                        ? () => Navigator.pop(context, selected)
-                        : null,
-                    mouseCursor: SystemMouseCursors.click,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: selected != null
-                            ? selectedClr
-                            : Color(0x262D2D2D),
                       ),
-                      child: Center(
-                        child: Text(
-                          "Yoink!",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: selected != null ? Colors.white : defClr,
+                      subtitle: Text(
+                        '${f['ext']} • ${f['vcodec'] ?? ''} ${f['acodec'] ?? ''}'
+                            .trim(),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isSelected ? selectedClr : defClr,
+                        ),
+                      ),
+                      trailing: Text(
+                        _formatFileSize(f['filesize']),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: isSelected ? selectedClr : defClr,
+                        ),
+                      ),
+                      onTap: () {
+                        selectedFormat.value = isSelected ? null : formatId;
+                      },
+                    );
+                  },
+                ),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: InkWell(
+                      onTap: selected != null
+                          ? () => Navigator.pop(context, selected)
+                          : null,
+                      mouseCursor: SystemMouseCursors.click,
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: selected != null
+                              ? selectedClr
+                              : Color(0x262D2D2D),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Yoink!",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: selected != null ? Colors.white : defClr,
+                            ),
                           ),
                         ),
                       ),

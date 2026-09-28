@@ -29,7 +29,15 @@ class ScreenHome extends StatelessWidget {
           final formats = result['data']['formats'] as List<dynamic>;
           showModalBottomSheet(
             context: context,
-            builder: (ctx) => Sheet(formats: formats),
+            isScrollControlled: true,
+            builder: (ctx) => DraggableScrollableSheet(
+              expand: false,
+              snap: true,
+              snapSizes: [0.5, 1.0],
+              initialChildSize: 0.5,
+              builder: (context, scrollController) =>
+                  Sheet(formats: formats, scrollController: scrollController),
+            ),
           );
         } else {
           messenger.showSnackBar(
